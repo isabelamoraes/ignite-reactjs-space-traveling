@@ -17,6 +17,7 @@ interface Post {
   uid: string;
   first_publication_date: string | null;
   data: {
+    subtitle: string;
     title: string;
     banner: {
       url: string;
@@ -146,6 +147,7 @@ export const getStaticProps: GetStaticProps = async context => {
     first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       banner: {
         url: response.data.banner.url,
       },
