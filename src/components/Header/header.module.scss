@@ -1,1 +1,11 @@
-// TODO
+.header {
+  width: 100%;
+
+  svg {
+    max-width: 238px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
