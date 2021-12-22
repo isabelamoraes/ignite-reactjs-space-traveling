@@ -16,6 +16,11 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <script
+            async
+            defer
+            src="https://static.cdn.prismic.io/prismic.js?new=true&repo=ignite-reactjs-space-traveling"
+          ></script>
         </body>
       </Html>
     );
