@@ -47,11 +47,7 @@ export default function Home({ postsPagination }: HomeProps) {
     const newPosts = postsResult.results.map(post => {
       return {
         uid: post.uid,
-        first_publication_date: format(
-          new Date(post.first_publication_date),
-          'dd MMM yyyy',
-          { locale: ptBR }
-        ),
+        first_publication_date: post.first_publication_date,
         data: {
           title: post.data.title,
           subtitle: post.data.subtitle,
@@ -61,6 +57,10 @@ export default function Home({ postsPagination }: HomeProps) {
     });
 
     setPosts([...posts, ...newPosts]);
+  }
+
+  function formatDate(date: string) {
+    return format(new Date(date), 'dd MMM yyyy', { locale: ptBR });
   }
 
   return (
@@ -83,7 +83,7 @@ export default function Home({ postsPagination }: HomeProps) {
                 <div>
                   <div>
                     <FiCalendar />
-                    <time>{post.first_publication_date}</time>
+                    <time>{formatDate(post.first_publication_date)}</time>
                   </div>
 
                   <div>
@@ -116,11 +116,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const posts = postsResponse.results.map(post => {
     return {
       uid: post.uid,
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        'dd MMM yyyy',
-        { locale: ptBR }
-      ),
+      first_publication_date: post.first_publication_date,
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,

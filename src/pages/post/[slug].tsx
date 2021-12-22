@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { RichText } from 'prismic-dom';
 
 interface Post {
+  uid: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -38,11 +39,7 @@ export default function Post({ post }: PostProps) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return (
-      <h1 className={styles.load}>
-        Carregando<span>...</span>
-      </h1>
-    );
+    return <h1 className={styles.load}>Carregando...</h1>;
   }
 
   const totalWords = post.data.content.reduce((total, content) => {
@@ -55,6 +52,10 @@ export default function Post({ post }: PostProps) {
   }, 0);
 
   const time = Math.ceil(totalWords / 200);
+
+  function formatDate(date: string) {
+    return format(new Date(date), 'dd MMM yyyy', { locale: ptBR });
+  }
 
   return (
     <>
@@ -82,7 +83,7 @@ export default function Post({ post }: PostProps) {
             <div>
               <div>
                 <FiCalendar />
-                <time>{post.first_publication_date}</time>
+                <time>{formatDate(post.first_publication_date)}</time>
               </div>
 
               <div>
@@ -124,7 +125,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = posts.results.map(post => {
     return {
       params: {
-        slug: post.id,
+        slug: post.uid,
       },
     };
   });
@@ -141,11 +142,8 @@ export const getStaticProps: GetStaticProps = async context => {
   const response = await prismic.getByUID('posts', String(slug), {});
 
   const post = {
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      { locale: ptBR }
-    ),
+    uid: response.uid,
+    first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
       banner: {
